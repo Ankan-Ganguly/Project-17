@@ -14,6 +14,9 @@ function preload(){
   jwelleryImg = loadImage("jwell.png");
   swordImg = loadImage("sword.png");
   endImg =loadAnimation("gameOver.png");
+  obstacle1Img = loadImage("obstacle1.png");
+  obstacle2Img = loadImage("obstacle2.png");
+  obstacle3Img = loadImage("obstacle3.png");
 }
 
 function setup(){
@@ -38,7 +41,7 @@ cashG=new Group();
 diamondsG=new Group();
 jwelleryG=new Group();
 swordGroup=new Group();
-
+  obstaclesGroup = new Group();
 }
 
 function draw() {
@@ -60,6 +63,7 @@ function draw() {
   createDiamonds();
   createJwellery();
   createSword();
+  obstacles();
     if (cashG.isTouching(boy)) {
       cashG.destroyEach();
       treasureCollection = treasureCollection + 50;
@@ -73,8 +77,9 @@ function draw() {
       treasureCollection = treasureCollection + 100;
       
     }else{
-      if(swordGroup.isTouching(boy)) {
+      if(swordGroup.isTouching(boy)|| obstaclesGroup.isTouching(boy)) {
         swordGroup.destroyEach();
+        obstaclesGroup.destroyEach();
         gameState = END;
     }
   }
@@ -90,6 +95,7 @@ function draw() {
     diamondsG.destroyEach();
     jwelleryG.destroyEach();
     swordGroup.destroyEach();
+    obstaclesGroup.destroyEach();
     gameEnd.visible= true;
   }
 
@@ -149,5 +155,25 @@ function createSword(){
   swordGroup.add(sword);
   boy.depth = sword.depth;
   boy.depth = boy.depth + 1;
+  }
+}
+function obstacles(){
+  if (frameCount%60===0){
+  obstacle = createSprite(Math.round(random(50,350)),40, 30,30);
+  obstacle.scale= 0.08;
+  obstacle.velocityY = 4;
+  obstacle.lifetime = 115;
+  var position = Math.round(random(1,3));
+  switch(position){
+    case 1: obstacle.addImage(obstacle1Img);
+      break;
+      case 2: obstacle.addImage(obstacle2Img);
+      break;
+      case 3: obstacle.addImage(obstacle3Img);
+      break;
+      default : break;
+  }
+  
+  obstaclesGroup.add(obstacle);
   }
 }
